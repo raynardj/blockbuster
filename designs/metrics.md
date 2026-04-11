@@ -1,5 +1,7 @@
 ## Metrics 📋
 
+Metrics is to mesure the amount of change / impact happened after applying a `hack`.
+
 ### Compute & Throughput Metrics (Speed) ⚡🖥️
 
 These metrics determine how efficiently the architecture utilizes the hardware—during **training** 🏋️ and **inference** 🔮 alike.
@@ -35,3 +37,20 @@ Some hacks (skipping LayerNorm, heavy quant, …) make training a **roller coast
 - **Gradient Norm Magnitude & Variance** 📐📊: Watch the $L_2$ norm—**exploding** 🧨 / **vanishing** 🫥 gradients show up before NaN.
 - **Activation Outlier Magnitude** 🌡️🔭: Max |hidden| values. RMSNorm / some activations spawn **outliers** 🦒—bad news for PTQ to INT8 / FP8 🔢.
 - **Step-to-Convergence / Tokens-to-Target-Loss** ⏱️🎯: Steps or **M tokens** to hit a fixed val loss—the **time vs. quality** tradeoff ⚖️.
+
+### Conveniences
+* 💾 **Pretrain Compatibility** : Does this hack eliminate our possibility to use model weights trained without such hack?
+* **Compatibility with Other Hacks**: This should be represented by levels of compatibility -> a list of hacks, eg.:
+```json
+{
+    "easy": [
+        "hack1",
+        "hack2",
+    ],
+    "with_code_change": [
+        "hack4",
+    ],
+    "impossible": [
+        "hack5",
+    ]
+}
