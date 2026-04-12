@@ -10,6 +10,7 @@ We produce a reports full of metrics on `hack`'s impact on the model.
 * [Hacks](./designs/hacks.md) that we want to study.
 * [Tasks](./designs/tasks.md) that we train and evaluate the model/optimizer on.
 * [Metrics](./designs/metrics.md) we cared.
+* [Vanillas](./designs/vanillas.md) what is concisdered baseline.
 
 ## Engineering
 * Python [Packaging](./designs/packaging.md)
