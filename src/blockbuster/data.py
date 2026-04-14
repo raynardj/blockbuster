@@ -1,11 +1,8 @@
 from datasets import load_dataset
 
 
-def build_dataset(tokenizer, max_train_rows=100_000, block_size=512):
-    raw = load_dataset("wikitext", "wikitext-2-raw-v1", split="train")
+def _tokenize_and_pack(raw, tokenizer, block_size):
     raw = raw.filter(lambda x: len(x["text"].strip()) > 0)
-    if len(raw) > max_train_rows:
-        raw = raw.select(range(max_train_rows))
 
     def tokenize(batch):
         return tokenizer(batch["text"], truncation=False)
@@ -24,5 +21,17 @@ def build_dataset(tokenizer, max_train_rows=100_000, block_size=512):
         }
 
     packed = tokenized.map(pack_blocks, batched=True)
-    packed.set_format(type="torch", columns=["input_ids", "attention_mask"])
+    packed = packed.with_format("torch")
     return packed
+
+
+def build_dataset(tokenizer, max_train_rows=100_000, block_size=512, test_rows=500):
+    raw = load_dataset("HuggingFaceFW/fineweb", "default", split="train", streaming=True)
+    raw = raw.skip(test_rows).take(max_train_rows)
+    return _tokenize_and_pack(raw, tokenizer, block_size)
+
+
+def build_test_dataset(tokenizer, block_size=512, test_rows=500):
+    raw = load_dataset("HuggingFaceFW/fineweb", "default", split="train", streaming=True)
+    raw = raw.take(test_rows)
+    return _tokenize_and_pack(raw, tokenizer, block_size)
